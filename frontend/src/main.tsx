@@ -8,6 +8,7 @@ import '@mantine/core/styles.css';
 
 import { MantineProvider } from '@mantine/core';
 import theme from './theme/mantineTheme';
+import DashBoard from './pages/DashBoard';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Home />} />
+                        <Route path="/dashboard" element={<DashBoard />} />
                     </Routes>
                 </BrowserRouter>
             </Suspense>
