@@ -1,0 +1,48 @@
+version: '3.3'
+
+services:
+  chartbrew:
+    image: razvanilin/chartbrew:latest
+    container_name: chartbrew
+    ports:
+      - "4019:4019"
+      - "4018:4018"
+    environment:
+      - CB_ENCRYPTION_KEY=51ea55b132f635ff5f37ef86d52042b8093fa5d65c887d415be9d52022de8cd9
+      - CB_API_HOST=0.0.0.0
+      - CB_API_PORT=4019
+      - CB_DB_HOST=chartbrew-db
+      - CB_DB_PORT=3306
+      - CB_DB_NAME=chartbrew
+      - CB_DB_USERNAME=root
+      - CB_DB_PASSWORD=password
+      - CB_REDIS_HOST=chartbrew-redis
+      - CB_REDIS_PORT=6379
+      - CB_REDIS_PASSWORD=password
+      - VITE_APP_CLIENT_HOST=http://localhost:4018
+      - VITE_APP_CLIENT_PORT=4018
+      - VITE_APP_API_HOST=http://localhost:4019
+    depends_on:
+      - chartbrew-db
+      - chartbrew-redis
+
+  chartbrew-db:
+    image: mysql:8.0
+    container_name: chartbrew-db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: chartbrew
+    volumes:
+      - chartbrew-db-data:/var/lib/mysql
+
+  chartbrew-redis:
+    image: redis:7
+    container_name: chartbrew-redis
+    environment:
+      REDIS_PASSWORD: password
+    command: ["redis-server", "--requirepass", "password"]
+    ports:
+      - "6379:6379"
+
+volumes:
+  chartbrew-db-data:
