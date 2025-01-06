@@ -123,7 +123,7 @@ const RiskAnalysis: React.FC<RiskAnalysisProps> = ({ selectedRisk, stockData }) 
               <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
                 <TableRow>
                   <TableCell>Ticker</TableCell>
-                  <TableCell>ESG Score</TableCell>
+                  <TableCell>ESG Risk Score</TableCell>
                   <TableCell>Sector</TableCell>
                   <TableCell>Market Cap</TableCell>
                   <TableCell>Risk (Beta)</TableCell>

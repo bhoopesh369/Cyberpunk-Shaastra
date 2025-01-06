@@ -13,6 +13,7 @@ import DashBoard from './pages/DashBoard';
 import Login from './pages/Login';
 import { Toaster } from 'react-hot-toast';
 import SectorAnalysis from './pages/SectorWise';
+import InvestmentCalculator from './pages/Calculator';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
@@ -35,6 +36,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                         <Route path="/dashboard" element={<DashBoard />} />
                         <Route path='/login' element={<Login />} />
                         <Route path="/sector" element={<SectorAnalysis />} />
+                        <Route path="/calculator" element={<InvestmentCalculator />} />
                     </Routes>
                 </BrowserRouter>
             </Suspense>

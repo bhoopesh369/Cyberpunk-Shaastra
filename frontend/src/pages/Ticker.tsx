@@ -80,6 +80,10 @@ const Ticker: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // getSymbol("MSFT")
+    // .then(company => {
+    //     console.log(company);
+    // });
     if (ticker && data.length > 0) {
       const filteredData = data.filter((item) => item.symbol === ticker.toUpperCase());
       setSelectedCompanyData(filteredData);
