@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import requests
 import json
 from typing import Dict
-from helper import diversification, sector_diversification, industry_diversification # Import helper functions
-
+from helper import diversification, sector_diversification
+industry_diversification, ROI
 
 app = FastAPI()
 
@@ -84,5 +84,16 @@ async def diversify_industry_portfolio(
     try:
         portfolio = industry_diversification(budget_dollars, risk_tolerance, max_companies, min_value, min_industries)
         return portfolio
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/ROI")
+async def get_ROI(ticker: str, years: int) -> Dict[str, float]:
+    """
+    Endpoint for calculating ROI.
+    """
+    try:
+        roi, annualized_roi = ROI(ticker, years)
+        return {"roi": roi, "annualized_roi": annualized_roi}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

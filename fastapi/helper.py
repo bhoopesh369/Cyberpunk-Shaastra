@@ -234,3 +234,37 @@ def industry_diversification(budget_dollars, risk_tolerance, max_companies, min_
     logging.info(f"Included Industries: {included_industries}")
 
     return portfolio
+
+
+
+def ROI(ticker, years):
+    stock_symbol = ticker  # Example: Apple Inc.
+    start_date = "2020-01-01"
+
+    end_date = f"{2020+years}-01-01"
+    # Fetch historical data
+    data = yf.download(stock_symbol, start=start_date, end=end_date)['Close']
+
+    # Calculate ROI
+    starting_price = data.iloc[0]  # First price in the dataset
+    ending_price = data.iloc[-1]   # Last price in the dataset
+
+    # Extract scalar values from the Series
+    starting_price_scalar = starting_price.item()  # Convert to scalar
+    ending_price_scalar = ending_price.item()      # Convert to scalar
+
+    # Calculate ROI
+    roi = ((ending_price_scalar - starting_price_scalar) / starting_price_scalar) * 100
+
+    # Calculate annualized ROI
+    years = (data.index[-1] - data.index[0]).days / 365.25  # Convert days to years
+    annualized_roi = ((ending_price_scalar / starting_price_scalar) ** (1 / years) - 1) * 100
+
+    # # Output results
+    # print(f"Stock Symbol: {stock_symbol}")
+    # print(f"Starting Price (2020-01-01): ${starting_price_scalar:.2f}")
+    # print(f"Ending Price (2025-01-06): ${ending_price_scalar:.2f}")
+    # print(f"Total ROI for {years} years: {roi:.2f}%")
+    # print(f"Annualized ROI: {annualized_roi:.2f}%")
+
+    return roi, annualized_roi
