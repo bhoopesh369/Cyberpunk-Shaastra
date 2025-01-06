@@ -156,7 +156,7 @@ const SectorCalculator = () => {
     return (
         <Box sx={{ p: 4, maxWidth: 1200, margin: "0 auto" }}>
             <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
-                Investment Strategy Calculator
+                Sector Diversification Optimizer
             </Typography>
 
             <Grid container spacing={4}>
