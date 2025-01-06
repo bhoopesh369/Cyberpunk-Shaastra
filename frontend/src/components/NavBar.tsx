@@ -88,8 +88,8 @@ const NavBar = () => {
             path: "/login",
             description: "User login",
         },
-        { text: "Settings", icon: <Settings />, path: "/settings" },
-        { text: "About", icon: <Info />, path: "/about" },
+        // { text: "Settings", icon: <Settings />, path: "/settings" },
+        // { text: "About", icon: <Info />, path: "/about" },
     ];
 
     const toggleSidebar = () => {

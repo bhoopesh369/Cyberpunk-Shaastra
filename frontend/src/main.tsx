@@ -33,10 +33,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                     <Routes>
                         <Route path="/:ticker" element={<Ticker />} />
                         <Route path="/" element={<Home />} />
-                        <Route path="/dashboard" element={<DashBoard />} />
+                        <Route path="/calculator" element={<DashBoard />} />
                         <Route path='/login' element={<Login />} />
                         <Route path="/sector" element={<SectorAnalysis />} />
-                        <Route path="/calculator" element={<Calculator />} />
+                        <Route path="/dashboard" element={<Calculator />} />
                     </Routes>
                 </BrowserRouter>
             </Suspense>
