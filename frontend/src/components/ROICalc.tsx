@@ -147,22 +147,22 @@ const ROICalculator: React.FC = () => {
                         <div className="space-y-2">
                             <div className="flex justify-between">
                                 <span className="font-medium">ROI:</span>
-                                <span className="text-green-600">
+                                <span className={results.roi < 0 ? "text-red-600" : "text-green-600"}>
                                     {(results.roi).toFixed(2)}
                                 </span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="font-medium">Annualized ROI:</span>
-                                <span className="text-green-600">
+                                <span className={results.annualized_roi < 0 ? "text-red-600" : "text-green-600"}>
                                     {(results.annualized_roi).toFixed(2)}
                                 </span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="font-medium">Total Profit:</span>
-                                <span className="text-green-600">
+                                <span className={results.annualized_roi < 0 ? "text-red-600" : "text-green-600"}>
                                     {formatCurrency(results.annualized_roi * amount / 100)}
                                 </span>
-                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -170,5 +170,6 @@ const ROICalculator: React.FC = () => {
         </div>
     );
 };
+
 
 export default ROICalculator;
