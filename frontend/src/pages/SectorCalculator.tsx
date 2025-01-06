@@ -312,12 +312,18 @@ const SectorCalculator = () => {
                                     <Tab label="Recommended Allocations" />
                                 </Tabs>
                                 {selectedTab === 0 && (
-                                    <Box sx={{ height: "300px" }}>
+                                    <Box sx={{ height: "300px", backgroundColor: "" }}
+                                     >
                                         <Typography variant="subtitle1" gutterBottom>
                                             Portfolio Allocation
                                         </Typography>
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <PieChart>
+                                        <ResponsiveContainer 
+                                        width="100%" height="100%"
+                                        className="bg-black rounded-lg mb-10"
+                                        rounded-md
+                                        >
+
+                                            <PieChart style={{ backgroundColor: 'transparent' }}>
                                                 <Pie
                                                     data={pieChartData}
                                                     cx="50%"

@@ -33,7 +33,6 @@ import {
 import csg from './00mbu';
 import { useNavigate } from 'react-router-dom';
 
-import ticker from '../../ticker-name.json';
 
 import allowedTicker from '../../allowed-list.json';
 
