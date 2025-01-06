@@ -14,7 +14,7 @@ import {
     Tabs,
     Tab,
 } from "@mui/material";
-import { AccountBalance, TrendingUp, Groups, BarChart } from "@mui/icons-material";
+import { AccountBalance, TrendingUp, Groups } from "@mui/icons-material";
 import {
     PieChart,
     Pie,
@@ -22,11 +22,11 @@ import {
     ResponsiveContainer,
     Tooltip,
     Legend,
-    RadarChart,
-    PolarAngleAxis,
-    PolarGrid,
-    PolarRadiusAxis,
-    Radar,
+    BarChart,
+    CartesianGrid,
+    XAxis,
+    YAxis,
+    Bar,
 } from "recharts";
 
 import tickerName from "../../ticker-name.json";
@@ -247,7 +247,7 @@ const SectorCalculator = () => {
 
                         <Box sx={{ mb: 4 }}>
                             <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                                <BarChart sx={{ mr: 1, color: "#9c27b0" }} />
+                                {/* <BarChart sx={{ mr: 1, color: "#9c27b0" }} /> */}
                                 <Typography variant="subtitle1">Minimum Allocation (%)</Typography>
                             </Box>
                             <Slider
@@ -270,7 +270,7 @@ const SectorCalculator = () => {
 
                         <Box>
                             <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                                <BarChart sx={{ mr: 1, color: "#ff9800" }} />
+                                {/* <BarChart sx={{ mr: 1, color: "#ff9800" }} /> */}
                                 <Typography variant="subtitle1">Minimum Sectors</Typography>
                             </Box>
                             <Slider
@@ -380,28 +380,64 @@ const SectorCalculator = () => {
                                             <Typography variant="h6" gutterBottom>
                                                 Sector Wise Allocation
                                             </Typography>
-                                            <Box width="100%">
-                                                <RadarChart
-                                                    cx={220}
-                                                    cy={150}
-                                                    outerRadius={150}
-                                                    width={400}
-                                                    height={300}
-                                                    data={data}
-                                                    z-index={10}
-                                                    className="scale-50"
-                                                >
-                                                    <PolarGrid />
-                                                    <PolarAngleAxis dataKey="sector" />
-                                                    <PolarRadiusAxis />
-                                                    <Radar
-                                                        name="Values"
-                                                        dataKey="value"
-                                                        stroke="#8884d8"
-                                                        fill="#8884d8"
-                                                        fillOpacity={0.6}
-                                                    />
-                                                </RadarChart>
+                                            <Box
+                                                sx={{
+                                                    width: "100%",
+                                                    height: 400,
+                                                    p: 2,
+                                                    backgroundColor: "#fff",
+                                                    borderRadius: 2,
+                                                    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+                                                }}
+                                            >
+                                                <ResponsiveContainer>
+                                                    <BarChart
+                                                        data={data}
+                                                        margin={{
+                                                            top: 20,
+                                                            right: 30,
+                                                            left: 20,
+                                                            bottom: 20,
+                                                        }}
+                                                    >
+                                                        <CartesianGrid
+                                                            strokeDasharray="3 3"
+                                                            stroke="#f0f0f0"
+                                                        />
+                                                        <XAxis
+                                                            dataKey="sector"
+                                                            tick={{ fill: "#666" }}
+                                                            tickLine={{ stroke: "#666" }}
+                                                        />
+                                                        <YAxis
+                                                            tick={{ fill: "#666" }}
+                                                            tickLine={{ stroke: "#666" }}
+                                                        />
+                                                        <Tooltip
+                                                            cursor={{ fill: "rgba(0, 0, 0, 0.05)" }}
+                                                            contentStyle={{
+                                                                backgroundColor: "#fff",
+                                                                border: "1px solid #ccc",
+                                                                borderRadius: "4px",
+                                                                padding: "10px",
+                                                            }}
+                                                        />
+                                                        <Legend
+                                                            wrapperStyle={{
+                                                                paddingTop: "10px",
+                                                            }}
+                                                        />
+                                                        <Bar
+                                                            dataKey="value"
+                                                            fill="#8884d8"
+                                                            name="Sector Value"
+                                                            opacity={0.8}
+                                                            radius={[4, 4, 0, 0]}
+                                                            animationDuration={1500}
+                                                            animationEasing="ease-in-out"
+                                                        />
+                                                    </BarChart>
+                                                </ResponsiveContainer>
                                             </Box>
                                         </Box>
                                     </Box>
