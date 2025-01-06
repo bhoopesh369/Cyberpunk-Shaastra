@@ -75,7 +75,7 @@ const Login = () => {
         toast.success('Successfully logged in!');
         // Redirect to dashboard after successful login
         setTimeout(() => {
-          window.location.href = '/';
+          window.location.href = '/dashboard';
         }, 500);
         setError('');
       } else {

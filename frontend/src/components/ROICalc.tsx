@@ -7,7 +7,7 @@ const ROICalculator: React.FC = () => {
     const [results, setResults] = useState<{ roi: number; annualized_roi: number } | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [amount, setAmount] = useState<number>(1);
+    const [amount, setAmount] = useState<number>(1000);
 
     const ticker = useParams<{ ticker: string }>();
 
@@ -15,12 +15,12 @@ const ROICalculator: React.FC = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch("aaeeca/ROI", {
+            const response = await fetch("http://localhost:8000/ROI", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ ticker: ticker, years }),
+                body: JSON.stringify({ ticker: ticker.ticker, years }),
             });
 
             if (!response.ok) {
@@ -148,15 +148,21 @@ const ROICalculator: React.FC = () => {
                             <div className="flex justify-between">
                                 <span className="font-medium">ROI:</span>
                                 <span className="text-green-600">
-                                    {(results.roi * 100).toFixed(2)}%
+                                    {(results.roi).toFixed(2)}
                                 </span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="font-medium">Annualized ROI:</span>
                                 <span className="text-green-600">
-                                    {(results.annualized_roi * 100 * amount).toFixed(2)}%
+                                    {(results.annualized_roi).toFixed(2)}
                                 </span>
                             </div>
+                            <div className="flex justify-between">
+                                <span className="font-medium">Total Profit:</span>
+                                <span className="text-green-600">
+                                    {formatCurrency(results.annualized_roi * amount / 100)}
+                                </span>
+                                </div>
                         </div>
                     </div>
                 )}
