@@ -22,6 +22,7 @@ import {
 import RiskAnalysis from './Algorithm';
 
 import csg from './00mbu'
+import DocumentUploader from '../components/DocumentUploader';
 
 interface StockData {
   ticker: string;
@@ -36,6 +37,7 @@ interface StockData {
 
 const DashBoard = () => {
   const [open, setOpen] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
   const [selectedStrategy, setSelectedStrategy] = useState<any>('Balanced');
 
  const [stockData, setStockData] = useState<StockData[]>([]);
@@ -77,6 +79,14 @@ const DashBoard = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleClickUpload = () => {
+    setUploadOpen(true);
+  };
+
+  const handleCloseUpload = () => {
+    setUploadOpen(false);
   };
 
   const handleStrategySelect = (strategy: any) => {
@@ -126,6 +136,49 @@ const DashBoard = () => {
       >
         Choose Investment Strategy
       </Button>
+
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleClickUpload}
+        sx={{
+          mb: 3,
+          ml: 2,
+          borderRadius: '28px',
+          padding: '12px 24px',
+          textTransform: 'none',
+          fontSize: '1.1rem',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            transform: 'translateY(-2px)',
+            boxShadow: '0 6px 16px rgba(0,0,0,0.2)',
+          },
+        }}
+      >
+        Document Upload
+      </Button>
+
+      <Dialog
+        open={uploadOpen}
+        onClose={handleCloseUpload}
+        maxWidth="md"
+        fullWidth
+        TransitionComponent={Fade}
+        TransitionProps={{ timeout: 600 }}
+        PaperProps={{
+          sx: {
+            borderRadius: '24px',
+            overflow: 'hidden',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+            width: '40%',
+            height: '30%'
+          }
+        }}
+      >
+        <DocumentUploader />
+
+      </Dialog>
 
       <Dialog 
         open={open} 
