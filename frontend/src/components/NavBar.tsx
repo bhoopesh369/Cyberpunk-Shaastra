@@ -31,8 +31,25 @@ const NavBar = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const navigate = useNavigate();
 
-    const findTickerFromName = async (name: any) => {
-        return name;
+    const findTickerFromName = async (name:any) => {
+
+        // return name
+        const url = `https://localhost:8000/ticker?name=${name}`;
+
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.ticker) {
+                return data.ticker;
+            } else {
+                throw new Error('No results found');
+            }
+        } catch (error) {
+            console.error('Error fetching ticker:', error);
+            alert('Could not find a ticker for the given name. Please try again.');
+            return null;
+        }
     };
 
     const handleSearch = async (event: any) => {

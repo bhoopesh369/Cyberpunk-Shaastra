@@ -33,6 +33,7 @@ import {
 import csg from './00mbu';
 import { useNavigate } from 'react-router-dom';
 
+import ticker from '../../ticker-name.json';
 interface StockData {
   ticker: string;
   E_score: number;
@@ -57,20 +58,23 @@ const SectorAnalysis = () => {
     const rows = csvText.split('\n').filter((row:any) => row.trim());
     // const headers = rows[0].split(',');
     
-    const parsedData = rows.slice(1).map((row:any) => {
+    const parsedData = rows.slice(1).map((row: any) => {
       const values = row.split(',');
+      const tickerSymbol = values[0];
+      if (!ticker.find((company: any) => company.ticker === tickerSymbol)) {
+      return null;
+      }
       return {
-        'ticker': values[0],
-        'E_score': parseFloat(values[1]),
-        'S_score': parseFloat(values[2]),
-        'G_score': parseFloat(values[3]),
-        'ESG_score': parseFloat(values[4]),
-        'Sectors': values[5],
-        'Market_Cap': parseFloat(values[6]),
-        'Beta_1Y': parseFloat(values[7]),
+      'ticker': tickerSymbol,
+      'E_score': parseFloat(values[1]),
+      'S_score': parseFloat(values[2]),
+      'G_score': parseFloat(values[3]),
+      'ESG_score': parseFloat(values[4]),
+      'Sectors': values[5],
+      'Market_Cap': parseFloat(values[6]),
+      'Beta_1Y': parseFloat(values[7]),
       };
-    }
-    );
+    }).filter((stock: StockData | null) => stock !== null);
     console.log('parsedData:', parsedData);
     setStockData(parsedData);
 
