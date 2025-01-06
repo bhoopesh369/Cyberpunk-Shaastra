@@ -4,7 +4,15 @@
 
 ## Description
 
-This is a AI powered platform that helps users to optimize their financial decisions in a sustainable way. It provides a set of tools that help users to make better financial decisions that are aligned with their values and goals. The platform uses a combination of financial data, environmental data, and user preferences to provide personalized recommendations on how to optimize their financial decisions in a sustainable way.
+This AI-powered platform helps users optimize their financial decisions in a manner that aligns with sustainability goals. The platform delivers personalized recommendations that maximize environmental, social, and governance (ESG) outcomes by leveraging AI, financial data, environmental metrics, and user preferences. 
+
+We address challenges in green finance, the platform provides tools to -
+
+1) Score projects based on sustainability impact, helping using identify opportunities with the highest ESG value.
+
+2) Optimize resource allocation, ensuring efficient investment within budget constraints while prioritizing ESG outcomes.
+
+3) Predict future risks associated with green investments and ROI
 
 
 ## Demo Video
