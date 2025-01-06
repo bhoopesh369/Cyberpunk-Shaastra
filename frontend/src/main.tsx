@@ -2,12 +2,13 @@ import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import './main.css';
-import { Home } from './pages';
+import { Home, Ticker } from './pages';
 
 import '@mantine/core/styles.css';
 
 import { MantineProvider } from '@mantine/core';
 import theme from './theme/mantineTheme';
+import { NavBar } from './components';
 import DashBoard from './pages/DashBoard';
 import Login from './pages/Login';
 import { Toaster } from 'react-hot-toast';
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <MantineProvider theme={theme}>
             <Suspense fallback={<>Loading</>}>
+
                 <Toaster
                     position="top-right"
                     reverseOrder={false}
@@ -26,7 +28,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                     }}
                 />
                 <BrowserRouter>
+                    <NavBar />
                     <Routes>
+                        <Route path="/:ticker" element={<Ticker />} />
                         <Route path="/" element={<Home />} />
                         <Route path="/dashboard" element={<DashBoard />} />
                         <Route path='/login' element={<Login />} />
