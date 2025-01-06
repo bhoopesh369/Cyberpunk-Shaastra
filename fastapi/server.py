@@ -1,11 +1,21 @@
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI,File, UploadFile, HTTPException, Body , status
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 import json
-from typing import Dict
+from typing import Dict, List
 from helper import diversification, sector_diversification ,industry_diversification, ROI
+import google.generativeai as genai
+import os
+from dotenv import load_dotenv
 
 app = FastAPI()
+
+load_dotenv()
+gemini_key = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=gemini_key)
+
+
+model = genai.GenerativeModel('gemini-pro')
 
 # Add CORS middleware
 app.add_middleware(
@@ -99,3 +109,28 @@ async def get_ROI(
         return {"roi": roi, "annualized_roi": annualized_roi}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+@app.post("/upload-documents")
+async def upload_documents(files: List[UploadFile] = File(...)):
+    try:
+        if not files:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No files were uploaded")
+
+        all_responses = []
+        for file in files:
+            file_content = await file.read()
+            text_content = file_content.decode('utf-8')
+            
+            prompt = f"Analyze the content of this document and summarize it: {text_content}"
+            response = model.generate_content(prompt)
+            all_responses.append({
+                "file_name": file.filename,
+                "gemini_response": response.text
+                })
+            
+        return {"message": "Files processed successfully.", "responses": all_responses}
+
+
+    except Exception as e:
+         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"An error occurred: {e}")    
