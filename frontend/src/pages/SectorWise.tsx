@@ -34,6 +34,16 @@ import csg from './00mbu';
 import { useNavigate } from 'react-router-dom';
 
 import ticker from '../../ticker-name.json';
+
+import allowedTicker from '../../allowed-list.json';
+
+function isAllowedTicker(ticker: string) {
+  if (!ticker || typeof ticker !== 'string') {
+    return false;
+  }
+  return allowedTicker.allowed_tickers.includes(ticker.toUpperCase());
+}
+
 interface StockData {
   ticker: string;
   E_score: number;
@@ -61,7 +71,7 @@ const SectorAnalysis = () => {
     const parsedData = rows.slice(1).map((row: any) => {
       const values = row.split(',');
       const tickerSymbol = values[0];
-      if (!ticker.find((company: any) => company.ticker === tickerSymbol)) {
+      if (!isAllowedTicker(tickerSymbol)) {
       return null;
       }
       return {

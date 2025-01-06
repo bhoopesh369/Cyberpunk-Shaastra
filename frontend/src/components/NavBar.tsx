@@ -34,7 +34,7 @@ const NavBar = () => {
     const findTickerFromName = async (name:any) => {
 
         // return name
-        const url = `https://localhost:8000/ticker?name=${name}`;
+        const url = `http://localhost:8000/ticker?name=${name}`;
 
 
         try {

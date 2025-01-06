@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Slider,
@@ -7,11 +7,12 @@ import {
   TextField,
   Button,
   Card,
-  CardContent,
   Grid,
   CircularProgress,
   Alert,
   InputAdornment,
+  Tabs,
+  Tab,
 } from '@mui/material';
 import {
   AccountBalance,
@@ -19,6 +20,7 @@ import {
   Groups,
   BarChart,
 } from '@mui/icons-material';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 interface CalculatorInputs {
   budget_dollars: number;
@@ -37,22 +39,30 @@ const InvestmentCalculator = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<any>(null);
+  
+  interface InvestmentResult {
+    expected_return: number;
+    portfolio_beta: number;
+    [key: string]: number; // This allows for dynamic keys with number values
+  }
+  const [result, setResult] = useState<InvestmentResult | null>(null);
+  const [selectedTab, setSelectedTab] = useState(0);
+
 
   const handleCalculate = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('YOUR_API_ENDPOINT', {
+      const response = await fetch('http://localhost:8000/diversify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(inputs),
       });
-      
+
       if (!response.ok) throw new Error('Failed to calculate investment strategy');
-      
+
       const data = await response.json();
       setResult(data);
     } catch (err: any) {
@@ -61,6 +71,54 @@ const InvestmentCalculator = () => {
       setLoading(false);
     }
   };
+  const COLORS = [
+    '#0088FE',
+    '#00C49F',
+    '#FFBB28',
+    '#FF8042',
+    '#AF19FF',
+    '#FF69B4',
+    '#00FFFF',
+    '#FFFF00',
+    '#7FFF00',
+    '#FFA500',
+    '#4B0082',
+    '#00FA9A',
+    '#DC143C',
+    '#00008B',
+    '#8FBC8F',
+    '#FFD700',
+    '#800080',
+    '#2E8B57',
+    '#FF4500',
+    '#1E90FF',
+  ];
+
+  const pieChartData = result
+    ? Object.entries(result)
+        .filter(([key]) => key !== 'expected_return' && key !== 'portfolio_beta')
+        .map(([stock, amount], index) => ({
+          name: stock,
+          value: amount,
+          color: COLORS[index % COLORS.length],
+        }))
+    : [];
+  
+  const handleChangeTab = (_event: React.SyntheticEvent, newValue: number) => {
+    setSelectedTab(newValue);
+  };
+
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+        const data = payload[0].payload;
+        return (
+            <div className="bg-white border border-gray-200 rounded p-2 shadow-md">
+              <p className="text-sm font-medium text-gray-800">{`${data.name}: $${data.value.toFixed(2)} (${(data.value / pieChartData.reduce((sum, item) => sum + item.value, 0) * 100).toFixed(2)}%)`}</p>
+            </div>
+        );
+    }
+    return null;
+};
 
   return (
     <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
@@ -207,34 +265,88 @@ const InvestmentCalculator = () => {
             )}
 
             {result && !loading && (
-              <Box>
-                <Card sx={{ mb: 2, backgroundColor: '#fff' }}>
-                  <CardContent>
-                    <Typography variant="h6" color="primary">
-                      Portfolio Summary
-                    </Typography>
-                    {/* Add your result visualization here */}
-                    <Typography variant="body1">
-                      Expected Return: {result.expected_return}%
-                    </Typography>
-                    <Typography variant="body1">
-                      Portfolio Beta: {result.portfolio_beta}
-                    </Typography>
-                    {/* Add more result details */}
-                  </CardContent>
-                </Card>
-
-                <Typography variant="subtitle1" gutterBottom>
-                  Recommended Allocations
-                </Typography>
-                {/* Add allocation visualization here */}
+                <Box>
+                  <Tabs
+                    value={selectedTab}
+                    onChange={handleChangeTab}
+                    aria-label="investment results tabs"
+                    centered
+                    sx={{mb: 2}}
+                  >
+                      <Tab label="Allocation Chart" />
+                      <Tab label="Recommended Allocations" />
+                  </Tabs>
+                  {selectedTab === 0 && (
+                    <Box sx={{ height: '300px' }}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Portfolio Allocation
+                      </Typography>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                            <Pie
+                                data={pieChartData}
+                                cx="50%"
+                                cy="50%"
+                                labelLine={false}
+                                outerRadius={100}
+                                fill="#8884d8"
+                                dataKey="value"
+                            >
+                                {pieChartData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                            </Pie>
+                            <Tooltip content={CustomTooltip} />
+                            <Legend />
+                        </PieChart>
+                    </ResponsiveContainer>
+                  </Box>
+                  )}
+                  {selectedTab === 1 && (
+                      <Box>
+                        <Typography variant="subtitle1" gutterBottom>
+                          Recommended Allocations
+                        </Typography>
+                          <Box>
+                              {Object.entries(result)
+                                .filter(([key]) => key !== 'expected_return' && key !== 'portfolio_beta')
+                                  .map(([stock, amount]: [string, number]) => (
+                                      <Card
+                                        key={stock}
+                                        sx={{
+                                          mb: 1,
+                                          p: 2,
+                                          display: 'flex',
+                                          justifyContent: 'space-between',
+                                          alignItems: 'center',
+                                          backgroundColor: '#e3f2fd',
+                                        }}
+                                      >
+                                        <Typography
+                                          variant="body1"
+                                          sx={{
+                                            color: '#1976d2',
+                                            textDecoration: 'underline',
+                                            cursor: 'pointer',
+                                          }}
+                                          onClick={() => window.location.href = `/${stock}`}
+                                        >
+                                          {stock}
+                                        </Typography>
+                                        <Typography variant="body1">${amount.toFixed(2)}</Typography>
+                                      </Card>
+                                  ))}
+                            </Box>
+                      </Box>
+                  )}
               </Box>
+
             )}
 
             {!result && !loading && !error && (
-              <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
                 alignItems: 'center',
                 height: '400px',
                 color: 'text.secondary'
