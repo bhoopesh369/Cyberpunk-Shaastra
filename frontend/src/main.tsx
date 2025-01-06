@@ -9,15 +9,28 @@ import '@mantine/core/styles.css';
 import { MantineProvider } from '@mantine/core';
 import theme from './theme/mantineTheme';
 import DashBoard from './pages/DashBoard';
+import Login from './pages/Login';
+import { Toaster } from 'react-hot-toast';
+import SectorAnalysis from './pages/SectorWise';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <MantineProvider theme={theme}>
             <Suspense fallback={<>Loading</>}>
+                <Toaster
+                    position="top-right"
+                    reverseOrder={false}
+                    gutter={8}
+                    toastOptions={{
+                        duration: 5000,
+                    }}
+                />
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/dashboard" element={<DashBoard />} />
+                        <Route path='/login' element={<Login />} />
+                        <Route path="/sector" element={<SectorAnalysis />} />
                     </Routes>
                 </BrowserRouter>
             </Suspense>

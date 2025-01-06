@@ -16,6 +16,7 @@ import {
   CardContent,
   Grid,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface StockData {
   ticker: string;
@@ -35,6 +36,8 @@ interface RiskAnalysisProps {
 
 const RiskAnalysis: React.FC<RiskAnalysisProps> = ({ selectedRisk, stockData }) => {
   const [recommendedStocks, setRecommendedStocks] = useState<StockData[]>([]);
+
+  const navigate = useNavigate();
 
   const analyzeRisk = (data: StockData[], riskLevel: string | null) => {
     if (!riskLevel) return [];
@@ -129,7 +132,12 @@ const RiskAnalysis: React.FC<RiskAnalysisProps> = ({ selectedRisk, stockData }) 
               </TableHead>
               <TableBody>
                 {recommendedStocks.map((stock) => (
-                  <TableRow key={stock.ticker} hover>
+                  <TableRow 
+                    key={stock.ticker}
+                    hover
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => navigate(`/${stock.ticker}`)}
+                  >
                     <TableCell>
                       <Typography variant="subtitle2">{stock.ticker}</Typography>
                     </TableCell>

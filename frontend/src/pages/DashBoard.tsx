@@ -36,7 +36,7 @@ interface StockData {
 
 const DashBoard = () => {
   const [open, setOpen] = useState(false);
-  const [selectedStrategy, setSelectedStrategy] = useState<any>(null);
+  const [selectedStrategy, setSelectedStrategy] = useState<any>('Balanced');
 
  const [stockData, setStockData] = useState<StockData[]>([]);
 
