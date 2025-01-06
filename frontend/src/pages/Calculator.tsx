@@ -10,6 +10,7 @@ import {
 import { AccountBalance, Groups, Home } from "@mui/icons-material";
 import InvestmentCalculator from "./InvestmentCalculator";
 import SectorCalculator from "./SectorCalculator";
+import IndustryCalculator from "./IndustryCalculator";
 
 enum CalculatorType {
     INVESTMENT = "investment",
@@ -54,7 +55,7 @@ const Calculator = () => {
             case CalculatorType.SECTOR:
                 return <SectorCalculator />; // You'll need to create this component
             case CalculatorType.INDUSTRY:
-                return <></>; // You'll need to create this component
+                return <IndustryCalculator />; // You'll need to create this component
             default:
                 return <InvestmentCalculator />;
         }

@@ -20,16 +20,16 @@ interface CalculatorInputs {
     risk_tolerance: number;
     max_companies: number;
     min_value: number;
-    min_sectors: number;
+    min_industries: number;
 }
 
-const SectorCalculator = () => {
+const IndustryCalculator = () => {
     const [inputs, setInputs] = useState<CalculatorInputs>({
         budget_dollars: 10000,
         risk_tolerance: 0.7,
         max_companies: 10,
         min_value: 0.01,
-        min_sectors: 1,
+        min_industries: 1,
     });
 
     const [loading, setLoading] = useState(false);
@@ -62,7 +62,7 @@ const SectorCalculator = () => {
     return (
         <Box sx={{ p: 4, maxWidth: 1200, margin: "0 auto" }}>
             <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
-                Sector Wise Calculator
+                Industry Wise Calculator
             </Typography>
 
             <Grid container spacing={4}>
@@ -177,12 +177,12 @@ const SectorCalculator = () => {
                         <Box sx={{ mb: 4 }}>
                             <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                                 <BarChart sx={{ mr: 1, color: "#9c27b0" }} />
-                                <Typography variant="subtitle1">Minimum Sectors</Typography>
+                                <Typography variant="subtitle1">Minimum Industries</Typography>
                             </Box>
                             <Slider
-                                value={inputs.min_sectors}
+                                value={inputs.min_industries}
                                 onChange={(_, value) =>
-                                    setInputs({ ...inputs, min_sectors: value as number })
+                                    setInputs({ ...inputs, min_industries: value as number })
                                 }
                                 min={1}
                                 max={5}
@@ -283,4 +283,4 @@ const SectorCalculator = () => {
     );
 };
 
-export default SectorCalculator;
+export default IndustryCalculator;
