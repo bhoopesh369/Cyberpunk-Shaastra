@@ -15,7 +15,21 @@ import {
     Tab,
 } from "@mui/material";
 import { AccountBalance, TrendingUp, Groups, BarChart } from "@mui/icons-material";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import {
+    PieChart,
+    Pie,
+    Cell,
+    ResponsiveContainer,
+    Tooltip,
+    Legend,
+    RadarChart,
+    PolarAngleAxis,
+    PolarGrid,
+    PolarRadiusAxis,
+    Radar,
+} from "recharts";
+
+import tickerName from "../../ticker-name.json";
 
 interface CalculatorInputs {
     budget_dollars: number;
@@ -120,6 +134,24 @@ const SectorCalculator = () => {
         }
         return null;
     };
+
+    // get all the sectors of the companies and their total value
+
+    const sectorData = pieChartData.reduce(
+        (acc, item: any) => {
+            const sector = tickerName.find((stock) => stock.ticker === item.name)?.sector;
+            if (sector) {
+                acc[sector] = acc[sector] ? acc[sector] + item.value : item.value;
+            }
+            return acc;
+        },
+        {} as { [key: string]: number },
+    );
+
+    const data = Object.entries(sectorData).map(([key, value]) => ({
+        sector: key,
+        value: value,
+    }));
 
     return (
         <Box sx={{ p: 4, maxWidth: 1200, margin: "0 auto" }}>
@@ -282,7 +314,7 @@ const SectorCalculator = () => {
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                    <Paper sx={{ p: 3, backgroundColor: "#f8faff", height: "100%" }}>
+                    <Paper sx={{ p: 3, backgroundColor: "#f8faff", height: "100%", width: "110%" }}>
                         <Typography variant="h6" gutterBottom>
                             Results
                         </Typography>
@@ -312,18 +344,17 @@ const SectorCalculator = () => {
                                     <Tab label="Recommended Allocations" />
                                 </Tabs>
                                 {selectedTab === 0 && (
-                                    <Box sx={{ height: "300px", backgroundColor: "" }}
-                                     >
+                                    <Box sx={{ height: "300px", backgroundColor: "" }}>
                                         <Typography variant="subtitle1" gutterBottom>
                                             Portfolio Allocation
                                         </Typography>
-                                        <ResponsiveContainer 
-                                        width="100%" height="100%"
-                                        className="bg-black rounded-lg mb-10"
-                                        rounded-md
+                                        <ResponsiveContainer
+                                            width="100%"
+                                            height="100%"
+                                            className="bg-black rounded-lg mb-10"
+                                            rounded-md
                                         >
-
-                                            <PieChart style={{ backgroundColor: 'transparent' }}>
+                                            <PieChart style={{ backgroundColor: "transparent" }}>
                                                 <Pie
                                                     data={pieChartData}
                                                     cx="50%"
@@ -344,6 +375,35 @@ const SectorCalculator = () => {
                                                 <Legend />
                                             </PieChart>
                                         </ResponsiveContainer>
+                                        {/* sector wise allocation totaln value each sector */}
+                                        <Box sx={{ mt: 4 }} width="100%">
+                                            <Typography variant="h6" gutterBottom>
+                                                Sector Wise Allocation
+                                            </Typography>
+                                            <Box width="100%">
+                                                <RadarChart
+                                                    cx={220}
+                                                    cy={150}
+                                                    outerRadius={150}
+                                                    width={400}
+                                                    height={300}
+                                                    data={data}
+                                                    z-index={10}
+                                                    className="scale-50"
+                                                >
+                                                    <PolarGrid />
+                                                    <PolarAngleAxis dataKey="sector" />
+                                                    <PolarRadiusAxis />
+                                                    <Radar
+                                                        name="Values"
+                                                        dataKey="value"
+                                                        stroke="#8884d8"
+                                                        fill="#8884d8"
+                                                        fillOpacity={0.6}
+                                                    />
+                                                </RadarChart>
+                                            </Box>
+                                        </Box>
                                     </Box>
                                 )}
                                 {selectedTab === 1 && (
