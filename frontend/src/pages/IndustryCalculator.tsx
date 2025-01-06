@@ -14,8 +14,22 @@ import {
     Tabs,
     Tab,
 } from "@mui/material";
-import { AccountBalance, TrendingUp, Groups, BarChart } from "@mui/icons-material";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import { AccountBalance, TrendingUp, Groups, BarChart as BarChartIcon } from "@mui/icons-material";
+import {
+    PieChart,
+    Pie,
+    Cell,
+    ResponsiveContainer,
+    Tooltip,
+    Legend,
+    BarChart,
+    CartesianGrid,
+    XAxis,
+    YAxis,
+    Bar,
+} from "recharts";
+
+import tickerName from "../../ticker-name.json";
 
 interface CalculatorInputs {
     budget_dollars: number;
@@ -121,6 +135,24 @@ const IndustryCalculator = () => {
         return null;
     };
 
+      // get all the industries of the companies and their total value
+
+      const industryData = pieChartData.reduce(
+        (acc, item: any) => {
+            const industry = tickerName.find((stock) => stock.ticker === item.name)?.industry;
+            if (industry) {
+                acc[industry] = acc[industry] ? acc[industry] + item.value : item.value;
+            }
+            return acc;
+        },
+        {} as { [key: string]: number },
+    );
+
+    const data = Object.entries(industryData).map(([key, value]) => ({
+        industry: key,
+        value: value,
+    }));
+
     return (
         <Box sx={{ p: 4, maxWidth: 1200, margin: "0 auto" }}>
             <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
@@ -215,7 +247,7 @@ const IndustryCalculator = () => {
 
                         <Box sx={{ mb: 4 }}>
                             <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                                <BarChart sx={{ mr: 1, color: "#9c27b0" }} />
+                                <BarChartIcon sx={{ mr: 1, color: "#9c27b0" }} />
                                 <Typography variant="subtitle1">Minimum Allocation (%)</Typography>
                             </Box>
                             <Slider
@@ -238,7 +270,7 @@ const IndustryCalculator = () => {
 
                         <Box>
                             <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                                <BarChart sx={{ mr: 1, color: "#ff9800" }} />
+                                <BarChartIcon sx={{ mr: 1, color: "#ff9800" }} />
                                 <Typography variant="subtitle1">Minimum Industries</Typography>
                             </Box>
                             <Slider
@@ -282,7 +314,7 @@ const IndustryCalculator = () => {
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                    <Paper sx={{ p: 3, backgroundColor: "#f8faff", height: "100%" }}>
+                <Paper sx={{ p: 3, backgroundColor: "#f8faff", height: "100%", width: "110%" }}>
                         <Typography variant="h6" gutterBottom>
                             Results
                         </Typography>
@@ -312,12 +344,17 @@ const IndustryCalculator = () => {
                                     <Tab label="Recommended Allocations" />
                                 </Tabs>
                                 {selectedTab === 0 && (
-                                    <Box sx={{ height: "300px" }}>
-                                        <Typography variant="subtitle1" gutterBottom>
+                                    <Box sx={{ height: "300px", backgroundColor: "" }}>
+                                         <Typography variant="subtitle1" gutterBottom>
                                             Portfolio Allocation
                                         </Typography>
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <PieChart>
+                                        <ResponsiveContainer
+                                            width="100%"
+                                            height="100%"
+                                            className="bg-black rounded-lg mb-10"
+                                            rounded-md
+                                        >
+                                            <PieChart style={{ backgroundColor: "transparent" }}>
                                                 <Pie
                                                     data={pieChartData}
                                                     cx="50%"
@@ -338,6 +375,71 @@ const IndustryCalculator = () => {
                                                 <Legend />
                                             </PieChart>
                                         </ResponsiveContainer>
+                                    {/* industry wise allocation totaln value each industry */}
+                                        <Box sx={{ mt: 4 }} width="100%">
+                                            <Typography variant="h6" gutterBottom>
+                                                Industry Wise Allocation
+                                            </Typography>
+                                            <Box
+                                                sx={{
+                                                    width: "100%",
+                                                    height: 400,
+                                                    p: 2,
+                                                    backgroundColor: "#fff",
+                                                    borderRadius: 2,
+                                                    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+                                                }}
+                                            >
+                                                <ResponsiveContainer>
+                                                    <BarChart
+                                                        data={data}
+                                                        margin={{
+                                                            top: 20,
+                                                            right: 30,
+                                                            left: 20,
+                                                            bottom: 20,
+                                                        }}
+                                                    >
+                                                        <CartesianGrid
+                                                            strokeDasharray="3 3"
+                                                            stroke="#f0f0f0"
+                                                        />
+                                                        <XAxis
+                                                            dataKey="industry"
+                                                            tick={{ fill: "#666" }}
+                                                            tickLine={{ stroke: "#666" }}
+                                                        />
+                                                        <YAxis
+                                                            tick={{ fill: "#666" }}
+                                                            tickLine={{ stroke: "#666" }}
+                                                        />
+                                                        <Tooltip
+                                                            cursor={{ fill: "rgba(0, 0, 0, 0.05)" }}
+                                                            contentStyle={{
+                                                                backgroundColor: "#fff",
+                                                                border: "1px solid #ccc",
+                                                                borderRadius: "4px",
+                                                                padding: "10px",
+                                                            }}
+                                                        />
+                                                        <Legend
+                                                            wrapperStyle={{
+                                                                paddingTop: "10px",
+                                                            }}
+                                                        />
+                                                        <Bar
+                                                            dataKey="value"
+                                                            fill="#8884d8"
+                                                            name="Industry Value"
+                                                            opacity={0.8}
+                                                            radius={[4, 4, 0, 0]}
+                                                            animationDuration={1500}
+                                                            animationEasing="ease-in-out"
+                                                        />
+                                                    </BarChart>
+                                                </ResponsiveContainer>
+                                            </Box>
+                                        </Box>
                                     </Box>
                                 )}
                                 {selectedTab === 1 && (
