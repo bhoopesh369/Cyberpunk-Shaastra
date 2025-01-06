@@ -6,7 +6,6 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
-    Typography,
 } from "@mui/material";
 import { AccountBalance, Groups, Home } from "@mui/icons-material";
 import InvestmentCalculator from "./InvestmentCalculator";
@@ -32,12 +31,12 @@ const calculatorOptions: CalculatorSelector[] = [
     },
     {
         type: CalculatorType.SECTOR,
-        label: "Retirement Planning Calculator",
+        label: "Sector Wise Calculator",
         icon: <Groups />,
     },
     {
         type: CalculatorType.INDUSTRY,
-        label: "Mortgage Calculator",
+        label: "Industrty Wise Calculator",
         icon: <Home />,
     },
 ];
